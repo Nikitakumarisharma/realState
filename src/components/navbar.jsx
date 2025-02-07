@@ -33,7 +33,7 @@ const Navbar = () => {
     <nav className="bg-gray-900 shadow-md px-8 py-5 flex justify-between items-center fixed top-0 w-full z-50">
       {/* Left - Logo */}
       <div className="text-xl font-bold text-white">
-        <Link href="/">Logo</Link>
+        <Link href="/">ExpressWay</Link>
       </div>
 
       {/* Mobile Menu Button */}

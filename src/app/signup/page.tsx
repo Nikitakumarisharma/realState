@@ -25,8 +25,10 @@ export default function SignupPage() {
       }
 
       router.push("/dashboard"); // Redirect after successful login
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
     }
   };
 
@@ -70,9 +72,12 @@ export default function SignupPage() {
 
       // Redirect to login page after delay
       setTimeout(() => router.push("/"), 3000);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
     }
+    
   };
 
   return (

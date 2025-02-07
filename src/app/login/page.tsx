@@ -21,9 +21,12 @@ export default function LoginPage() {
       const redirectTo = localStorage.getItem("redirectAfterLogin") || "/";
       localStorage.removeItem("redirectAfterLogin"); // Clear after redirection
       router.push(redirectTo);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
     }
+    
   };
 
   const handleGoogleLogin = async () => {
@@ -34,8 +37,10 @@ export default function LoginPage() {
       const redirectTo = localStorage.getItem("redirectAfterLogin") || "/";
       localStorage.removeItem("redirectAfterLogin");
       router.push(redirectTo);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      }
     }
   };
 
@@ -68,7 +73,7 @@ export default function LoginPage() {
         </form>
 
         <p className="text-sm text-center mt-2 text-gray-600">
-          Don't have an account? <a href="/signup" className="text-black">Sign Up</a>
+        Don&apos;t have an account? <a href="/signup" className="text-black">Sign Up</a>
         </p>
 
         <div className="mt-4">
