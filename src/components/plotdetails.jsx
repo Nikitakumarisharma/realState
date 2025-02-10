@@ -94,10 +94,6 @@ const PropertyDetails = () => {
           bookedBy: employeeID,
           plan: paymentPlan,
         }));
-
-        // setTimeout(() => {
-        //   router.push("/");
-        // }, 2000);
       },
       prefill: {
         name: employeeID,
