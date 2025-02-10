@@ -32,8 +32,8 @@ const ProjectsAndSuccess = () => {
         Our Projects & Success Stories
       </h2>
       <p className="text-lg text-gray-700 leading-relaxed">
-        🚀 Over the past <strong>[X] years</strong>, we have successfully sold <strong>[Y]</strong> plots 
-        in <strong>[City/State]</strong>, helping numerous investors and families secure their dream land.
+        🚀 Over the past <strong>7 years</strong>, we have successfully sold <strong>Multiple</strong> plots 
+        in <strong>[Delhi/UP]</strong>, helping numerous investors and families secure their dream land.
       </p>
 
       {/* Image Slider for Sold Plots */}
@@ -53,19 +53,18 @@ const ProjectsAndSuccess = () => {
       {/* Testimonials */}
       <div className="mt-12 bg-gray-100 p-6 rounded-lg text-gray-700 shadow-md">
         <p className="italic text-lg">
-          "Buying a plot from <strong>Your Company Name</strong> was the best investment I made. 
+          "Buying a plot from <strong>EcpressWay Builders</strong> was the best investment I made. 
           Their process was transparent, hassle-free, and legally verified."
         </p>
-        <p className="font-bold mt-3 text-indigo-600">— Jane Doe, Happy Customer</p>
+        <p className="font-bold mt-3 text-indigo-600">— Happy Customer</p>
       </div>
 
       {/* Ongoing Projects */}
       <div className="mt-10 text-left">
         <h3 className="text-2xl font-bold text-gray-800">📍 Ongoing Projects:</h3>
         <ul className="mt-4 list-disc list-inside text-lg text-gray-700">
-          <li><strong>Project 1:</strong> 200 SYD plots available in [Location]</li>
-          <li><strong>Project 2:</strong> Affordable 100 SYD plots near [Landmark]</li>
-          <li><strong>Project 3:</strong> Premium 300 SYD plots in [Prime Location]</li>
+          <li><strong>Project 1:</strong> 137 plots available in Noida 144</li>
+       
         </ul>
       </div>
     </section>
