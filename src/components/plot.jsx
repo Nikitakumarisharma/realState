@@ -72,7 +72,7 @@ const TableWithImage = () => {
                       onClick={() => handleRowClick(item.id)}
                       className={`cursor-pointer hover:bg-black hover:text-white transition 
                       ${
-                        item.availability === "booked"
+                        item.availability === "booked" || item.availability === " half-booked"
                           ? "bg-yellow-300 hover:bg-yellow-500"
                           : item.availability === "sold"
                           ? "bg-red-400 hover:bg-red-600"

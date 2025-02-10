@@ -5,7 +5,7 @@ import Vision from "@/components/vision"
 import SuccessStory from "@/components/projectAndSuccess"
 export default function About() {
   return (
-    <div className="space-y-8">
+    <div>
      <Carausal />
      <WhoWeAre/>
       <WhyChooseUs />

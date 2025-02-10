@@ -28,7 +28,7 @@ const ContactUs = () => {
               <iframe
                 title="Google Map"
                 className="w-full h-full"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.1923500659715!2d-122.41941568468235!3d37.77492927975919!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c3e3e9491%3A0xf9d71b0ff1e0c1b6!2sSan%20Francisco%2C%20CA%2C%20USA!5e0!3m2!1sen!2sin!4v1647482325689!5m2!1sen!2sin"
+                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3506.2143378837154!2d77.4088836754961!3d28.50319837573556!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjjCsDMwJzExLjUiTiA3N8KwMjQnNDEuMyJF!5e0!3m2!1sen!2sin!4v1739000108171!5m2!1sen!2sin"
                 allowFullScreen
                 loading="lazy"
               ></iframe>
