@@ -9,6 +9,7 @@ const PropertyDetails = () => {
   const { id } = useParams();
   const [property, setProperty] = useState(null);
   const [employeeID, setEmployeeID] = useState("");
+  const [paymentPlan, setPaymentPlan] = useState("One-Time Payment");
   const [error, setError] = useState("");
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const router = useRouter();
@@ -84,17 +85,19 @@ const PropertyDetails = () => {
         await updateDoc(docRef, {
           availability: "booked",
           bookedBy: employeeID,
+          plan: paymentPlan,
         });
 
         setProperty((prev) => ({
           ...prev,
           availability: "booked",
           bookedBy: employeeID,
+          plan: paymentPlan,
         }));
 
-        setTimeout(() => {
-          router.push("/");
-        }, 2000);
+        // setTimeout(() => {
+        //   router.push("/");
+        // }, 2000);
       },
       prefill: {
         name: employeeID,
@@ -117,7 +120,7 @@ const PropertyDetails = () => {
   }
 
   return (
-    <div className="mt-24 flex justify-center items-center bg-white">
+    <div className="mt-20 flex justify-center items-center bg-white">
       <div className="w-full max-w-md bg-gray-800 text-white p-6 rounded-lg shadow-lg border">
         <h2 className="text-2xl font-bold text-center mb-4">Plot Details</h2>
 
@@ -127,23 +130,23 @@ const PropertyDetails = () => {
           <p className="text-lg"><strong>Booking Price:</strong> ₹{property.bookPrice}</p>
           <p className="text-lg"><strong>Total Price:</strong> ₹{parseInt(property.size) * 16000}</p>
 
-          <p className="mt-2 text-gray-400 cursor-pointer" onClick={() => router.push("/termAndCondition")}>
+          <p className=" text-gray-400 cursor-pointer" onClick={() => router.push("/termAndCondition")}>
             Terms & Conditions Apply
           </p>
 
           {paymentSuccess && (
-            <div className="mt-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-center">
+            <div className=" bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-center">
               ✅ Payment Successful! Your booking is confirmed.
             </div>
           )}
 
           {(property.availability === "booked" || property.availability === "sold") ? (
             <p className="text-lg mt-4 text-red-500">
-              <strong>Booked by:</strong> {property.bookedBy}
+              <strong>Booked by:</strong> {property.bookedBy} | {property.plan} Plan
             </p>
           ) : (
             !paymentSuccess && (
-              <div className="mt-6">
+              <div className="mt-2">
                 <input
                   type="text"
                   placeholder="Enter Employee ID"
@@ -151,6 +154,17 @@ const PropertyDetails = () => {
                   value={employeeID}
                   onChange={(e) => setEmployeeID(e.target.value)}
                 />
+                <select
+                  className="w-full px-4 py-2 border rounded-lg mb-2 text-black"
+                  value={paymentPlan}
+                  onChange={(e) => setPaymentPlan(e.target.value)}
+                >
+                  <option value="One-Time Payment">One-Time Payment</option>
+                  <option value="3 months">3 Months Payment Plan</option>
+                  <option value="6 months">6 Months Payment Plan</option>
+                  <option value="1 year">1 Year Payment Plan</option>
+                </select>
+
                 {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
                 <button className="px-4 py-2 bg-purple-500 text-white rounded-lg w-full" onClick={handlePayment}>

@@ -38,9 +38,9 @@ const EMIDetails = () => {
   }
 
   const costPerSqYard = {
-    "3-month": 160225,
-    "6-month": 160500,
-    "1-year": 170000,
+    "3-month": 16250,
+    "6-month": 16500,
+    "1-year": 17000,
   };
 
   const calculateMonthlyPayment = (duration, cost) => {
@@ -51,23 +51,11 @@ const EMIDetails = () => {
 
 
   return (
-    <div className="flex flex-col items-center justify-center bg-white p-20">
-      <p className="mb-9 font-bold text-3xl"> Check Out Our Plans.</p>
-      
-      {/* Plot Information Card */}
-      {/* <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md text-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Plot Details</h2>
-        <p className="text-lg mt-4"><strong>Plot No:</strong> {plot.plotNo}</p>
-        <p className="text-lg"><strong>Size:</strong> {plot.size}</p>
-        
-        <p className="text-lg">
-  <strong>Total Price:</strong> ₹{parseInt(plot.size) * 16000}
-</p> 
-
-      </div> */}
+    <div className="flex flex-col items-center justify-center bg-white lg:p-20 px-10">
+      <p className="mb-9 font-bold lg:text-3xl"> Check Out Our Plans.</p>
 
       {/* EMI Plan Cards */}
-      <div className="grid md:grid-cols-3 gap-6 w-full max-w-5xl">
+      <div className="grid lg:grid-cols-3 grid-cols-1 gap-6 w-full max-w-5xl md:px-44 lg:px-0">
         {/* 3 Month Plan */}
         <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg max-w-xs text-center">
   <h3 className="text-lg font-bold text-purple-300">3 Month Plan</h3>

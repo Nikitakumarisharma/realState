@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-lg font-semibold mb-4">About Us</h3>
-            <p className="text-gray-400">ExpressWay is your trusted partner in finding the perfect property.</p>
+            <p className="text-gray-400">ExpressWay Builders is your trusted partner in finding the perfect property.</p>
           </div>
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
@@ -41,11 +41,9 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
             <p className="text-gray-400">
-             ExpressWay GC36+7HG
+             ExpressWay Builders sector 142
               <br />
               Noida, Uttar Pradesh
-              <br />
-              Phone: (123) 456-7890
               <br />
               Email: info@realestateco.com
             </p>
