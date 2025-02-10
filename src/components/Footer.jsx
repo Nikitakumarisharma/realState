@@ -41,9 +41,9 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
             <p className="text-gray-400">
-              123 Real Estate Street
+             ExpressWay GC36+7HG
               <br />
-              Cityville, State 12345
+              Noida, Uttar Pradesh
               <br />
               Phone: (123) 456-7890
               <br />
