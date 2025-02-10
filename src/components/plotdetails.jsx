@@ -74,7 +74,7 @@ const PropertyDetails = () => {
 
     const options = {
       key: "rzp_test_sD6C6D9RNmcc22",
-      amount: property.bookPrice * 100,
+      amount: (property.bookPrice * 100) + 49560,
       currency: "INR",
       name: "Property Booking",
       description: `Booking for Plot No: ${property.plotNo}`,
@@ -128,6 +128,7 @@ const PropertyDetails = () => {
           <p className="text-lg"><strong>Plot No:</strong> {property.plotNo}</p>
           <p className="text-lg"><strong>Size:</strong> {property.size} SQ.YD</p>
           <p className="text-lg"><strong>Booking Price:</strong> ₹{property.bookPrice}</p>
+          <p className="text-lg"><strong>Transaction + GST Charges:</strong> ₹495.60</p>
           <p className="text-lg"><strong>Total Price:</strong> ₹{parseInt(property.size) * 16000}</p>
 
           <p className=" text-gray-400 cursor-pointer" onClick={() => router.push("/termAndCondition")}>
