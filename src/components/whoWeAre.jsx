@@ -24,7 +24,7 @@ const WhoWeAre = () => {
               Who We Are
             </h2>
             <p className="text-gray-700 text-lg leading-relaxed">
-              <span className="font-semibold text-black">Express Way Real Estate</span> is a trusted name in the real estate industry, specializing in selling premium plots in prime locations. Whether you're looking for residential, commercial, or investment opportunities, we offer well-planned plots with clear titles and modern infrastructure.
+              <span className="font-semibold text-black">ExpressWay Builders</span> is a trusted name in the real estate industry, specializing in selling premium plots in prime locations. Whether you're looking for residential, commercial, or investment opportunities, we offer well-planned plots with clear titles and modern infrastructure.
             </p>
             <p className="mt-4 text-gray-700 text-lg">
               Our team ensures <span className="font-semibold text-black">hassle-free transactions</span>, transparency, and competitive pricing. With a commitment to customer satisfaction, we help you find the perfect plot that meets your needs and budget.

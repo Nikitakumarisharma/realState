@@ -48,10 +48,10 @@ const TableWithImage = () => {
         {/* Right Table Section */}
         <div className="w-full lg:p-4 overflow-x-auto overflow-y-auto max-h-[600px]">
           <div className="min-w-full inline-block align-middle mt-12">
-            <p className="text-2xl p-2">Click on the row to see Details</p>
+            <p className="lg:text-2xl p-2">Click on the row to see Details</p>
 
             <div className="border border-gray-300 rounded-lg shadow-md overflow-x-auto overflow-y-auto max-h-[500px]">
-              <table className="w-full divide-y divide-gray-200 table-auto min-w-[600px]">
+              <table className="w-full divide-y divide-gray-200 table-auto lg:min-w-[600px] min-w-[00px]">
                 <thead className="bg-gray-100">
                   <tr>
                     <th className="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase">

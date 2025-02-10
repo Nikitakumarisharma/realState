@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
@@ -30,11 +31,21 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-900 shadow-md px-8 py-5 flex justify-between items-center fixed top-0 w-full z-50">
+    <nav className="bg-gray-900 shadow-md px-8 flex justify-between items-center fixed top-0 w-full z-50">
       {/* Left - Logo */}
-      <div className="text-xl font-bold text-white">
-        <Link href="/">ExpressWay</Link>
-      </div>
+      <div className=" font-bold text-white">
+  <Link href="/">
+    <Image
+      src="/assets/logo.png" // Path to your logo inside the public folder
+      alt="ExpressWay Logo"
+      height={50} // Adjust height as needed
+      width={110} // Adjust width as needed
+      layout="intrinsic" // Ensures aspect ratio is maintained
+
+      priority // Ensures logo loads faster
+    />
+  </Link>
+</div>
 
       {/* Mobile Menu Button */}
       <button
