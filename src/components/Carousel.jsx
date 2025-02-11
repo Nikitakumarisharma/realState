@@ -4,9 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const images = [
-  "https://i.ytimg.com/vi/zumJJUL_ruM/maxresdefault.jpg",
-  "https://th.bing.com/th/id/OIP.o0eFqkTRAMMjs12Z_3vbHAHaE8?w=229&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
-  "https://th.bing.com/th/id/OIP.MqJEETRfjC-r9DTvx5CROgHaEN?w=281&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7",
+  "/assets/carausal1.jpg",
+  "/assets/carausal2.jpg",
+  "/assets/carausal3.jpg",
+  "/assets/carausal4.jpg",
 ];
 
 export default function Carousel() {
@@ -26,7 +27,7 @@ export default function Carousel() {
   }, [nextImage]);
 
   return (
-    <div className="relative h-[400px] w-full overflow-hidden z-10">
+    <div className="relative h-[500px] w-full overflow-hidden z-10">
       {images.map((src, index) => (
         <div
           key={src}
@@ -43,7 +44,7 @@ export default function Carousel() {
 
       {/* Overlay Content */}
       <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white z-20">
-        <h2 className="text-4xl font-bold mb-4">Check New Property</h2>
+        <h2 className="text-xl font-bold mb-4">Land is not just a piece of soil, it's a dream. Invest today, shape tomorrow's future!</h2>
 
       </div>
 
