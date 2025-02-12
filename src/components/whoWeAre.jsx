@@ -11,16 +11,16 @@ const WhoWeAre = () => {
             <img 
               src="/assets/aboutPlot.jpeg" 
               alt="Who We Are" 
-              className="rounded-xl shadow-lg h-[400px] object-cover border-4 border-orange-500"
+              className="rounded-xl shadow-lg h-[400px] object-cover border-4 border-blu"
             />
-            <div className="absolute top-4 bg-orange-600 text-white px-4 py-1 rounded-full text-sm">
+            <div className="absolute top-4 bg-blu text-white px-4 py-1 rounded-full text-sm">
               Trusted Real Estate
             </div>
           </div>
 
           {/* Right: Content */}
           <div className="text-left">
-            <h2 className="text-4xl font-extrabold text-orange-600 mb-4">
+            <h2 className="text-4xl font-extrabold text-blu mb-4">
               Who We Are
             </h2>
             <p className="text-gray-700 text-lg leading-relaxed">
@@ -32,7 +32,7 @@ const WhoWeAre = () => {
             <div className="mt-6">
               <a 
                 href="/contact" 
-                className="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300"
+                className="bg-blu hover:bg-orange-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition duration-300"
               >
                 Contact Us
               </a>

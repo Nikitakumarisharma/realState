@@ -32,8 +32,8 @@ const TableWithImage = () => {
   return (
     <div>
       <h1 className="text-center font-bold mt-14 text-3xl">
-        Check Out our <span className="text-purple-800">Plot Details</span>
-        <br /> in the <span className="text-purple-800">Prime</span> Locations
+        Check Out our <span className="text-blu">Plot Details</span>
+        <br /> in the <span className="text-blu">Prime</span> Locations
       </h1>
       <div className="grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 min-h-screen p-4 bg-white gap-4">
         {/* Left Image Section */}

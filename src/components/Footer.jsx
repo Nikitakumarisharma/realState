@@ -6,7 +6,7 @@ import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
 export default function Footer() {
     const router = useRouter();
   return (
-    <footer className="bg-gray-800 text-white">
+    <footer className="bg-blu text-white">
       <div className="max-w-6xl mx-auto px-4 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
