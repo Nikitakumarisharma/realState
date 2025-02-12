@@ -4,7 +4,7 @@ import React from "react";
 const WhyChooseUs = () => {
   return (
     <section className="max-w-4xl mx-auto text-center mb-12 bg-white  p-6 rounded-lg">
-      <h2 className="text-3xl font-bold text-purple-600">Why Choose Us?</h2>
+      <h2 className="text-3xl font-bold text-blu">Why Choose Us?</h2>
       <div className="mt-6 grid md:grid-cols-2 gap-6 text-gray-700">
         <div className="bg-gray-200 p-4 rounded-lg">
           ✅ <strong>Verified & Legal Plots</strong>

@@ -7,11 +7,8 @@ import "slick-carousel/slick/slick-theme.css";
 const ProjectsAndSuccess = () => {
   // Array of previous sold plot images
   const soldPlots = [
-    "/assets/plot.ppg",
-    // "/assets/plotMap.jpg",
-    "/assets/sec144.jpg",
-    "/assets/aboutPlot.jpeg",
-    "/assets/sec144.jpg",
+    "/assets/sold1.jpg",
+    "/assets/sold2.jpg",
   ];
 
   // Slider settings
@@ -27,8 +24,8 @@ const ProjectsAndSuccess = () => {
   };
 
   return (
-    <section className="max-w-6xl mx-auto text-center bg-white p-10 rounded-xl">
-      <h2 className="text-4xl font-extrabold text-indigo-600 mb-6">
+    <section className="max-w-6xl mx-auto text-center  bg-white p-10 rounded-xl">
+      <h2 className="text-4xl font-extrabold text-blu mb-6">
         Our Projects & Success Stories
       </h2>
       <p className="text-lg text-gray-700 leading-relaxed">
@@ -56,7 +53,7 @@ const ProjectsAndSuccess = () => {
           "Buying a plot from <strong>EcpressWay Builders</strong> was the best investment I made. 
           Their process was transparent, hassle-free, and legally verified."
         </p>
-        <p className="font-bold mt-3 text-indigo-600">— Happy Customer</p>
+        <p className="font-bold mt-3 text-blue">— Happy Customer</p>
       </div>
 
       {/* Ongoing Projects */}

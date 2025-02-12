@@ -7,7 +7,6 @@ const images = [
   "/assets/carausal1.jpg",
   "/assets/carausal2.jpg",
   "/assets/carausal3.jpg",
-  "/assets/carausal4.jpg",
 ];
 
 export default function Carousel() {
@@ -27,7 +26,7 @@ export default function Carousel() {
   }, [nextImage]);
 
   return (
-    <div className="relative h-[500px] w-full overflow-hidden z-10">
+    <div className="relative h-[500px] w-full overflow-hidden z-10 mt-20">
       {images.map((src, index) => (
         <div
           key={src}
@@ -43,8 +42,8 @@ export default function Carousel() {
       ))}
 
       {/* Overlay Content */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50 text-white z-20">
-        <h2 className="text-xl font-bold mb-4">Land is not just a piece of soil, it's a dream. Invest today, shape tomorrow's future!</h2>
+      <div className="absolute inset-0 flex flex-col items-center justify-center bg-opacity-50 text-white z-20">
+        <h2 className="lg:text-3xl text-xl font-bold mb-4 text-white">Land is not just a piece of soil, it's a dream. Invest today, shape tomorrow's future!</h2>
 
       </div>
 

@@ -24,7 +24,7 @@ const steps = [
 function EasySteps() {
   return (
     <div className="p-12 text-center font-poppins bg-gray-200">
-      <h2 className=" text-3xl font-bold text-black lg:mb-8 mb-2"><span className="text-purple-700 text-4xl">3</span> Easy Steps</h2>
+      <h2 className=" text-3xl font-bold text-black lg:mb-8 mb-2"><span className="text-blu text-4xl">3</span> Easy Steps</h2>
       <div className="flex flex-col md:flex-row justify-center items-center lg:gap-12 gap-2">
         {steps.map((step, index) => (
           <div key={index} className="flex flex-col items-center text-black">

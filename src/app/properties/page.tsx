@@ -1,12 +1,14 @@
 import SevenBoxesRow from "@/components/plot"
 import Carausal from "@/components/Carousel"
+import FAQ from "@/components/faq"
 
 export default function Properties() {
   return (
-    <div className="space-y-8 py-8">
+    <div className="">
 
         <Carausal />
         <SevenBoxesRow />
+        <FAQ /> 
 
     </div>
   )
