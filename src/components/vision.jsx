@@ -4,7 +4,7 @@ import { FaEye, FaBullseye } from "react-icons/fa";
 
 const VisionMission = () => {
   return (
-    <section className="relative py-20 bg-gradient-to-r from-green-50 to-gray-100">
+    <section className="relative py-20 bg-gradient-to-r from-green-50 to-gray-200">
       <div className="max-w-6xl mx-auto px-6 lg:px-16">
         <h2 className="text-4xl font-extrabold text-green-700 text-center mb-10">
           Our Vision & Mission
@@ -29,12 +29,12 @@ const VisionMission = () => {
           </div>
 
           {/* Mission Section */}
-          <div className="bg-white shadow-lg rounded-xl p-8 border-l-4 border-green-600">
-            <div className="flex items-center mb-4">
+          <div className="bg-white shadow-lg rounded-xl p-8 border-l-4 border-green-600 justify-center">
+            <div className="flex  mb-4">
               <FaBullseye className="text-green-600 text-3xl mr-3" />
               <h3 className="text-2xl font-semibold text-gray-800">Our Mission</h3>
             </div>
-            <p className="text-gray-700 text-lg leading-relaxed">
+            <p className="text-gray-700 text-lg leading-relaxed justify-center">
               Our mission is to provide secure, legally verified plots that 
               guarantee high returns and contribute to urban growth. We are 
               committed to delivering transparent and hassle-free real 
