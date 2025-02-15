@@ -50,7 +50,7 @@ const ProjectsAndSuccess = () => {
       {/* Testimonials */}
       <div className="mt-12 bg-gray-100 p-6 rounded-lg text-gray-700 shadow-md">
         <p className="italic text-lg">
-          "Buying a plot from <strong>EcpressWay Builders</strong> was the best investment I made. 
+          "Buying a plot from <strong>ExpressWay Builders</strong> was the best investment I made. 
           Their process was transparent, hassle-free, and legally verified."
         </p>
         <p className="font-bold mt-3 text-blue">— Happy Customer</p>

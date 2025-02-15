@@ -105,7 +105,7 @@ const Navbar = () => {
           ) : (
             <Link
               href="/login"
-              className="text-gray-300 hover:text-black py-2 block lg:inline"
+              className="text-gray-300 hover:text-gray-400 py-2 block lg:inline"
               onClick={() => setMenuOpen(false)}
             >
               Login
