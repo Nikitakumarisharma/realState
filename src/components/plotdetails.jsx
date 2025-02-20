@@ -78,7 +78,7 @@ const PropertyDetails = () => {
     }
 
     // Set the total amount to ₹1 for testing
-    const totalAmount = "1.00"; // Fixed ₹1 amount
+    const totalAmount = "0.1"; // Fixed ₹1 amount
     console.log("✅ Total Amount:", totalAmount);
 
     try {
