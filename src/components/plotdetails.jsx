@@ -113,7 +113,8 @@ const PropertyDetails = () => {
             // ✅ Correctly Open the Payment Gateway
             const cashfree = new window.Cashfree();
             cashfree
-                .checkout({ paymentSessionId: result.paymentSessionId })
+                .checkout({ paymentSessionId: result.paymentSessionId,  mode: process.env.NEXT_PUBLIC_CASHFREE_MODE // Ensure this is "production"
+                })
                 .then(async (paymentData) => {
                     console.log("✅ Payment Data:", paymentData);
 
