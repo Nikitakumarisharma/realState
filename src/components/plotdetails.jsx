@@ -46,110 +46,115 @@ const PropertyDetails = () => {
 
   const handlePayment = async () => {
     console.log("🟢 handlePayment started");
-  
+
     if (!employeeID) {
-      console.error("❌ Error: Employee ID is missing");
-      setError("Please enter the Employee ID.");
-      return;
+        console.error("❌ Error: Employee ID is missing");
+        setError("Please enter the Employee ID.");
+        return;
     }
-  
+
     const user = auth.currentUser;
     if (!user) {
-      console.warn("⚠️ User not logged in. Redirecting to login.");
-      localStorage.setItem("redirectAfterLogin", window.location.pathname);
-      router.push("/login");
-      return;
+        console.warn("⚠️ User not logged in. Redirecting to login.");
+        localStorage.setItem("redirectAfterLogin", window.location.pathname);
+        router.push("/login");
+        return;
     }
-  
+
     if (!validateEmployeeID(employeeID)) {
-      console.error("❌ Invalid Employee ID format");
-      setError("Invalid Employee ID.");
-      return;
+        console.error("❌ Invalid Employee ID format");
+        setError("Invalid Employee ID.");
+        return;
     }
-  
+
     setError("");
-  
+
+    // 🛑 Ensure the Cashfree script is fully loaded
     const scriptLoaded = await loadCashfreeScript();
     if (!scriptLoaded) {
-      console.error("❌ Cashfree SDK failed to load");
-      alert("Cashfree SDK failed to load. Check your internet connection.");
-      return;
-    }
-  
-    const totalAmount = (property.bookPrice*0 + 1).toFixed(2);
-    console.log("✅ Total Amount:", totalAmount);
-  
-    try {
-      console.log("⏳ Sending request to /api/cashfree-order...");
-      const response = await fetch("/api/cashfree-order", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          orderAmount: totalAmount,
-          customerName: employeeID,
-          customerEmail: `${employeeID}@example.com`,
-          customerPhone: "9999999999",
-        }),
-      });
-  
-      if (!response.ok) {
-        console.error("❌ Order creation failed:", await response.text());
-        setError("Failed to create order. Try again later.");
+        console.error("❌ Cashfree SDK failed to load");
+        alert("Cashfree SDK failed to load. Check your internet connection.");
         return;
-      }
-  
-      const result = await response.json();
-      console.log("✅ API Response:", result);
-  
-      if (result.status == "OK") {
-        if (!window.Cashfree) {
-          console.error("❌ Cashfree SDK is not loaded");
-          setError("Payment system error. Please refresh and try again.");
-          return;
-        }
-  
-        const cashfree = new window.Cashfree();
-        cashfree
-          .checkout({ paymentSessionId: result.paymentSessionId })
-          .then(async (paymentData) => {
-            console.log("✅ Payment Data:", paymentData);
-  
-            if (paymentData.txStatus != "SUCCESS") {
-              console.log("🎉 Payment Successful!");
-  
-              setPaymentSuccess(true);
-  
-              const docRef = doc(db, "Property", id);
-              await updateDoc(docRef, {
-                availability: "booked",
-                bookedBy: employeeID,
-                plan: paymentPlan,
-              });
-  
-              setProperty((prev) => ({
-                ...prev,
-                availability: "booked",
-                bookedBy: employeeID,
-                plan: paymentPlan,
-              }));
-            } else {
-              console.warn("⚠️ Payment failed:", paymentData);
-              setError("Payment failed. Please try again.");
-            }
-          })
-          .catch((error) => {
-            console.error("❌ Payment process error:", error);
-            setError("Payment process encountered an error.");
-          });
-      } else {
-        console.warn("⚠️ Order creation failed:", result);
-        setError("Failed to create order. Try again later.");
-      }
-    } catch (error) {
-      console.error("❌ Payment error:", error);
-      setError("Something went wrong. Please try again.");
     }
-  };
+
+    // Set the total amount to ₹1 for testing
+    const totalAmount = "1.00"; // Fixed ₹1 amount
+    console.log("✅ Total Amount:", totalAmount);
+
+    try {
+        console.log("⏳ Sending request to /api/cashfree-order...");
+        const response = await fetch("/api/cashfree-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                orderAmount: totalAmount,
+                customerName: employeeID,
+                customerEmail: `${employeeID}@example.com`,
+                customerPhone: "9999999999",
+            }),
+        });
+
+        if (!response.ok) {
+            console.error("❌ Order creation failed:", await response.text());
+            setError("Failed to create order. Try again later.");
+            return;
+        }
+
+        const result = await response.json();
+        console.log("✅ API Response:", result);
+
+        if (result.status === "OK") {
+            if (!window.Cashfree) {
+                console.error("❌ Cashfree SDK is not loaded");
+                setError("Payment system error. Please refresh and try again.");
+                return;
+            }
+
+            // ✅ Correctly Open the Payment Gateway
+            const cashfree = new window.Cashfree();
+            cashfree
+                .checkout({ paymentSessionId: result.paymentSessionId })
+                .then(async (paymentData) => {
+                    console.log("✅ Payment Data:", paymentData);
+
+                    // 🛑 Check if the payment was actually successful
+                    if (paymentData.txStatus === "SUCCESS") {
+                        console.log("🎉 Payment Successful!");
+
+                        setPaymentSuccess(true);
+
+                        const docRef = doc(db, "Property", id);
+                        await updateDoc(docRef, {
+                            availability: "booked",
+                            bookedBy: employeeID,
+                            plan: paymentPlan,
+                        });
+
+                        setProperty((prev) => ({
+                            ...prev,
+                            availability: "booked",
+                            bookedBy: employeeID,
+                            plan: paymentPlan,
+                        }));
+                    } else {
+                        console.warn("⚠️ Payment failed:", paymentData);
+                        setError("Payment failed. Please try again.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("❌ Payment process error:", error);
+                    setError("Payment process encountered an error.");
+                });
+        } else {
+            console.warn("⚠️ Order creation failed:", result);
+            setError("Failed to create order. Try again later.");
+        }
+    } catch (error) {
+        console.error("❌ Payment error:", error);
+        setError("Something went wrong. Please try again.");
+    }
+};
+
   
 
   if (!property) {
