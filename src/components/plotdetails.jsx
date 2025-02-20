@@ -96,7 +96,8 @@ const PropertyDetails = () => {
   }
 
   // ✅ Calculate Total Amount
-  const totalAmount = (property.bookPrice + 495.60).toFixed(2);
+  // const totalAmount = (property.bookPrice + 495.60).toFixed(2);
+  const totalAmount = (property.bookPrice*0 + 1).toFixed(2);
   console.log("✅ Total Amount:", totalAmount);
 
   try {
