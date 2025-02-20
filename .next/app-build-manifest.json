@@ -16,11 +16,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/property/[id]/page.js"
     ],
-    "/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/login/page.js"
-    ],
     "/api/cashfree-order/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
