@@ -113,30 +113,46 @@ const PropertyDetails = () => {
             // ✅ Correctly Open the Payment Gateway
             const cashfree = new window.Cashfree();
             cashfree
-                .checkout({ paymentSessionId: result.paymentSessionId,  mode: process.env.NEXT_PUBLIC_CASHFREE_MODE // Ensure this is "production"
+                .checkout({
+                    paymentSessionId: result.paymentSessionId,
+                    mode: process.env.NEXT_PUBLIC_CASHFREE_MODE // Ensure this is "production"
                 })
                 .then(async (paymentData) => {
                     console.log("✅ Payment Data:", paymentData);
 
-                    // 🛑 Check if the payment was actually successful
+                    // ✅ If Payment is Successful, Update Firebase & Redirect
                     if (paymentData.txStatus === "SUCCESS") {
                         console.log("🎉 Payment Successful!");
 
+                        // ✅ Update Firebase Document (Availability -> "Booked")
+                        try {
+                            const docRef = doc(db, "Property", id);
+                            await updateDoc(docRef, {
+                                availability: "booked",
+                                bookedBy: employeeID,
+                                plan: paymentPlan,
+                            });
+
+                            console.log("✅ Firebase Updated: Plot is now booked.");
+
+                            // ✅ Redirect to Home Page After 3 Seconds
+                            setTimeout(() => {
+                                router.push("/");
+                            }, 3000);
+
+                            // ✅ Update Local State to Reflect Booking
+                            setProperty((prev) => ({
+                                ...prev,
+                                availability: "booked",
+                                bookedBy: employeeID,
+                                plan: paymentPlan,
+                            }));
+                        } catch (firebaseError) {
+                            console.error("❌ Error Updating Firebase:", firebaseError);
+                            setError("Payment successful, but failed to update booking.");
+                        }
+
                         setPaymentSuccess(true);
-
-                        const docRef = doc(db, "Property", id);
-                        await updateDoc(docRef, {
-                            availability: "booked",
-                            bookedBy: employeeID,
-                            plan: paymentPlan,
-                        });
-
-                        setProperty((prev) => ({
-                            ...prev,
-                            availability: "booked",
-                            bookedBy: employeeID,
-                            plan: paymentPlan,
-                        }));
                     } else {
                         console.warn("⚠️ Payment failed:", paymentData);
                         setError("Payment failed. Please try again.");
@@ -155,6 +171,7 @@ const PropertyDetails = () => {
         setError("Something went wrong. Please try again.");
     }
 };
+
 
   
 
