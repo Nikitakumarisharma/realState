@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { auth } from "@/firebase/firebase_config"; // Import Firebase auth
+import { auth } from "@/firebase/firebase_config";
 import { db } from "@/firebase/firebase_config";
 
 const PropertyDetails = () => {
@@ -19,7 +19,6 @@ const PropertyDetails = () => {
       if (id) {
         const docRef = doc(db, "Property", id);
         const docSnap = await getDoc(docRef);
-
         if (docSnap.exists()) {
           setProperty({ id: docSnap.id, ...docSnap.data() });
         } else {
@@ -27,14 +26,13 @@ const PropertyDetails = () => {
         }
       }
     };
-
     fetchProperty();
   }, [id]);
 
-  const loadRazorpayScript = () => {
+  const loadCashfreeScript = () => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
       script.onload = () => resolve(true);
       script.onerror = () => resolve(false);
       document.body.appendChild(script);
@@ -47,65 +45,112 @@ const PropertyDetails = () => {
   };
 
   const handlePayment = async () => {
+    console.log("🟢 handlePayment started");
+  
     if (!employeeID) {
+      console.error("❌ Error: Employee ID is missing");
       setError("Please enter the Employee ID.");
       return;
     }
-
+  
     const user = auth.currentUser;
     if (!user) {
+      console.warn("⚠️ User not logged in. Redirecting to login.");
       localStorage.setItem("redirectAfterLogin", window.location.pathname);
       router.push("/login");
       return;
     }
-
+  
     if (!validateEmployeeID(employeeID)) {
+      console.error("❌ Invalid Employee ID format");
       setError("Invalid Employee ID.");
       return;
     }
+  
     setError("");
-
-    const res = await loadRazorpayScript();
-
-    if (!res) {
-      alert("Razorpay SDK failed to load. Check your internet connection.");
+  
+    const scriptLoaded = await loadCashfreeScript();
+    if (!scriptLoaded) {
+      console.error("❌ Cashfree SDK failed to load");
+      alert("Cashfree SDK failed to load. Check your internet connection.");
       return;
     }
-
-    const options = {
-      key: "rzp_test_sD6C6D9RNmcc22",
-      amount: (property.bookPrice * 100) + 49560,
-      currency: "INR",
-      name: "Property Booking",
-      description: `Booking for Plot No: ${property.plotNo}`,
-      handler: async (response) => {
-        setPaymentSuccess(true);
-
-        const docRef = doc(db, "Property", id);
-        await updateDoc(docRef, {
-          availability: "booked",
-          bookedBy: employeeID,
-          plan: paymentPlan,
-        });
-
-        setProperty((prev) => ({
-          ...prev,
-          availability: "booked",
-          bookedBy: employeeID,
-          plan: paymentPlan,
-        }));
-      },
-      prefill: {
-        name: employeeID,
-      },
-      theme: {
-        color: "#3399cc",
-      },
-    };
-
-    const paymentObject = new window.Razorpay(options);
-    paymentObject.open();
+  
+    const totalAmount = (property.bookPrice + 495.60).toFixed(2);
+    console.log("✅ Total Amount:", totalAmount);
+  
+    try {
+      console.log("⏳ Sending request to /api/cashfree-order...");
+      const response = await fetch("/api/cashfree-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderAmount: totalAmount,
+          customerName: employeeID,
+          customerEmail: `${employeeID}@example.com`,
+          customerPhone: "9999999999",
+        }),
+      });
+  
+      if (!response.ok) {
+        console.error("❌ Order creation failed:", await response.text());
+        setError("Failed to create order. Try again later.");
+        return;
+      }
+  
+      const result = await response.json();
+      console.log("✅ API Response:", result);
+  
+      if (result.status == "OK") {
+        if (!window.Cashfree) {
+          console.error("❌ Cashfree SDK is not loaded");
+          setError("Payment system error. Please refresh and try again.");
+          return;
+        }
+  
+        const cashfree = new window.Cashfree();
+        cashfree
+          .checkout({ paymentSessionId: result.paymentSessionId })
+          .then(async (paymentData) => {
+            console.log("✅ Payment Data:", paymentData);
+  
+            if (paymentData.txStatus != "SUCCESS") {
+              console.log("🎉 Payment Successful!");
+  
+              setPaymentSuccess(true);
+  
+              const docRef = doc(db, "Property", id);
+              await updateDoc(docRef, {
+                availability: "booked",
+                bookedBy: employeeID,
+                plan: paymentPlan,
+              });
+  
+              setProperty((prev) => ({
+                ...prev,
+                availability: "booked",
+                bookedBy: employeeID,
+                plan: paymentPlan,
+              }));
+            } else {
+              console.warn("⚠️ Payment failed:", paymentData);
+              setError("Payment failed. Please try again.");
+            }
+          })
+          .catch((error) => {
+            console.error("❌ Payment process error:", error);
+            setError("Payment process encountered an error.");
+          });
+      } else {
+        console.warn("⚠️ Order creation failed:", result);
+        setError("Failed to create order. Try again later.");
+      }
+    } catch (error) {
+      console.error("❌ Payment error:", error);
+      setError("Something went wrong. Please try again.");
+    }
   };
+  
 
   if (!property) {
     return (
@@ -127,12 +172,12 @@ const PropertyDetails = () => {
           <p className="text-lg"><strong>Transaction + GST Charges:</strong> ₹495.60</p>
           <p className="text-lg"><strong>Total Price:</strong> ₹{parseInt(property.size) * 16000}</p>
 
-          <p className=" text-gray-400 cursor-pointer" onClick={() => router.push("/termAndCondition")}>
+          <p className="text-gray-400 cursor-pointer" onClick={() => router.push("/termAndCondition")}>
             Terms & Conditions Apply
           </p>
 
           {paymentSuccess && (
-            <div className=" bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-center">
+            <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-center">
               ✅ Payment Successful! Your booking is confirmed.
             </div>
           )}

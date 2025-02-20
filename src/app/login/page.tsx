@@ -21,7 +21,7 @@ export default function LoginPage() {
       router.push(redirectTo);
     } catch (err: unknown) {
       if (err instanceof Error) {
-        setError(err.message);
+          setError(err.message);
       }
     }
     
@@ -57,7 +57,7 @@ export default function LoginPage() {
         </form>
 
         <p className="text-sm text-center mt-2 text-gray-600">
-        Don&apos;t have an account? <a href="/signup" className="text-black">Sign Up</a>
+        Don&apos;t have an account? <a href="/signup" className="text-red-600">Sign Up</a>
         </p>
 
       </div>
