@@ -67,6 +67,12 @@ const PropertyDetails = () => {
         return;
     }
 
+    if (!id) {
+        console.error("❌ Error: Property ID is undefined.");
+        setError("Invalid property ID. Unable to update booking.");
+        return;
+    }
+
     setError("");
 
     // 🛑 Ensure the Cashfree script is fully loaded
@@ -77,8 +83,8 @@ const PropertyDetails = () => {
         return;
     }
 
-    // Set the total amount to ₹1 for testing
-    const totalAmount = "1.00"; // Fixed ₹1 amount
+    // Set the total amount (change if needed)
+    const totalAmount = "10.00"; // Fixed ₹10 for better sandbox testing
     console.log("✅ Total Amount:", totalAmount);
 
     try {
@@ -115,7 +121,7 @@ const PropertyDetails = () => {
             cashfree
                 .checkout({
                     paymentSessionId: result.paymentSessionId,
-                    mode: process.env.NEXT_PUBLIC_CASHFREE_MODE // Ensure this is "production"
+                    mode: process.env.NEXT_PUBLIC_CASHFREE_MODE // Ensure this is "sandbox" or "production"
                 })
                 .then(async (paymentData) => {
                     console.log("✅ Payment Data:", paymentData);
@@ -126,7 +132,9 @@ const PropertyDetails = () => {
 
                         // ✅ Update Firebase Document (Availability -> "Booked")
                         try {
+                            console.log("🔄 Updating Firebase...");
                             const docRef = doc(db, "Property", id);
+
                             await updateDoc(docRef, {
                                 availability: "booked",
                                 bookedBy: employeeID,
@@ -135,24 +143,20 @@ const PropertyDetails = () => {
 
                             console.log("✅ Firebase Updated: Plot is now booked.");
 
+                            // ✅ Force UI to Refresh After Firebase Update
+                            setProperty(null);
+                            setTimeout(() => fetchProperty(), 2000);
+
                             // ✅ Redirect to Home Page After 3 Seconds
                             setTimeout(() => {
                                 router.push("/");
                             }, 3000);
 
-                            // ✅ Update Local State to Reflect Booking
-                            setProperty((prev) => ({
-                                ...prev,
-                                availability: "booked",
-                                bookedBy: employeeID,
-                                plan: paymentPlan,
-                            }));
+                            setPaymentSuccess(true);
                         } catch (firebaseError) {
                             console.error("❌ Error Updating Firebase:", firebaseError);
                             setError("Payment successful, but failed to update booking.");
                         }
-
-                        setPaymentSuccess(true);
                     } else {
                         console.warn("⚠️ Payment failed:", paymentData);
                         setError("Payment failed. Please try again.");
@@ -171,6 +175,7 @@ const PropertyDetails = () => {
         setError("Something went wrong. Please try again.");
     }
 };
+
 
 
   
