@@ -50,7 +50,8 @@ const Footer = () => {
 
               sector 142 Noida, Uttar Pradesh
               <br />
-              joshi.udham@gmail.com
+              <a href="mailto:joshi.udham@gmail.com" className=" underline">joshi.udham@gmail.com</a>
+
             </p>
           </div>
           <div>
