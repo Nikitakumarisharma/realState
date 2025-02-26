@@ -1,16 +1,24 @@
-"use client"
+"use client";
 import { useState } from "react";
 
-const ContactForm=()=> {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+const ContactForm = () => {
+  const [formData, setFormData] = useState({ name: "", email: "", contact: "", message: "" });
   const [status, setStatus] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const isValidContact = (contact) => /^[0-9]{10}$/.test(contact); // ✅ Validate 10-digit number
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!isValidContact(formData.contact)) {
+      setStatus("Please enter a valid 10-digit contact number.");
+      return;
+    }
+
     setStatus("Sending...");
 
     const response = await fetch("/api/contact", {
@@ -21,7 +29,7 @@ const ContactForm=()=> {
 
     if (response.ok) {
       setStatus("Message sent successfully!");
-      setFormData({ name: "", email: "", message: "" });
+      setFormData({ name: "", email: "", contact: "", message: "" });
     } else {
       setStatus("Failed to send message. Try again later.");
     }
@@ -49,6 +57,15 @@ const ContactForm=()=> {
           className="w-full border rounded p-2"
           required
         />
+        <input
+          type="text"
+          name="contact"
+          placeholder="Your Contact Number"
+          value={formData.contact}
+          onChange={handleChange}
+          className="w-full border rounded p-2"
+          required
+        />
         <textarea
           name="message"
           placeholder="Your Message"
@@ -65,4 +82,5 @@ const ContactForm=()=> {
     </div>
   );
 }
+
 export default ContactForm;

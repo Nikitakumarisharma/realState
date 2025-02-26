@@ -11,7 +11,9 @@ const PropertyDetails = () => {
   const [employeeID, setEmployeeID] = useState("");
   const [paymentPlan, setPaymentPlan] = useState("One-Time Payment");
   const [error, setError] = useState("");
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [bookingSuccess, setBookingSuccess] = useState(false);
+  const [showQR, setShowQR] = useState(false);
+  const [showPaymentConfirmation, setShowPaymentConfirmation] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -29,129 +31,46 @@ const PropertyDetails = () => {
     fetchProperty();
   }, [id]);
 
-  const loadCashfreeScript = () => {
-    return new Promise((resolve, reject) => {
-      if (window.Cashfree) {
-        resolve(true); // If already loaded, resolve immediately
-        return;
-      }
-  
-      const script = document.createElement("script");
-      script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
-      script.onload = () => resolve(true);
-      script.onerror = () => reject("Cashfree SDK failed to load");
-      document.body.appendChild(script);
-    });
-  };
-  
-
   const validateEmployeeID = (id) => {
     const validPattern = /^eppl000[1-9]$|^eppl0010$/;
     return validPattern.test(id);
   };
 
+  const handleBooking = async () => {
+    console.log("🟢 handleBooking started");
 
- const handlePayment = async () => {
-  console.log("🟢 handlePayment started");
-
-  if (!employeeID) {
-    console.error("❌ Error: Employee ID is missing");
-    setError("Please enter the Employee ID.");
-    return;
-  }
-
-  const user = auth.currentUser;
-  if (!user) {
-    console.warn("⚠️ User not logged in. Redirecting to login.");
-    localStorage.setItem("redirectAfterLogin", window.location.pathname);
-    router.push("/login");
-    return;
-  }
-
-  if (!validateEmployeeID(employeeID)) {
-    console.error("❌ Invalid Employee ID format");
-    setError("Invalid Employee ID.");
-    return;
-  }
-
-  setError("");
-
-  try {
-    console.log("⏳ Ensuring Cashfree SDK is loaded...");
-
-    // ✅ Ensure Cashfree SDK is loaded before proceeding
-    const scriptLoaded = await loadCashfreeScript();
-    if (!scriptLoaded) {
-      console.error("❌ Cashfree SDK failed to load");
-      setError("Cashfree SDK failed to load. Please check your internet connection.");
-      return;
-    }
-    
-    console.log("✅ Cashfree SDK Loaded Successfully");
-
-  } catch (error) {
-    console.error("❌ Error loading Cashfree SDK:", error);
-    setError("Payment system error. Please refresh and try again.");
-    return;
-  }
-
-  // ✅ Calculate Total Amount
-  // const totalAmount = (property.bookPrice + 495.60).toFixed(2);
-  const totalAmount = (property.bookPrice*0 + 1).toFixed(2);
-  console.log("✅ Total Amount:", totalAmount);
-
-  try {
-    console.log("⏳ Sending request to /api/cashfree-order...");
-
-    const response = await fetch("/api/cashfree-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        orderAmount: totalAmount,
-        customerName: employeeID,
-        customerEmail: `${employeeID}@example.com`,
-        customerPhone: "9999999999",
-      }),
-    });
-
-    if (!response.ok) {
-      console.error("❌ Order creation failed:", await response.text());
-      setError("Failed to create order. Try again later.");
+    if (!employeeID) {
+      console.error("❌ Error: Employee ID is missing");
+      setError("Please enter the Employee ID.");
       return;
     }
 
-    const result = await response.json();
-    console.log("✅ API Response:", result);
-
-    // ❌ FIX: Ensure `paymentSessionId` exists
-    if (!result.paymentSessionId) {
-      console.error("❌ Error: No payment session ID returned from API.");
-      setError("Payment could not be initiated. Try again later.");
+    const user = auth.currentUser;
+    if (!user) {
+      console.warn("⚠️ User not logged in. Redirecting to login.");
+      localStorage.setItem("redirectAfterLogin", window.location.pathname);
+      router.push("/login");
       return;
     }
 
-    if (!window.Cashfree) {
-      console.error("❌ Cashfree SDK is not loaded");
-      setError("Payment system error. Please refresh and try again.");
+    if (!validateEmployeeID(employeeID)) {
+      console.error("❌ Invalid Employee ID format");
+      setError("Invalid Employee ID.");
       return;
     }
 
-    console.log("✅ Opening Cashfree Payment Gateway...");
+    setError("");
+    setShowQR(true);
 
-    const cashfree = new window.Cashfree();
+    setTimeout(() => {
+      setShowPaymentConfirmation(true);
+    }, 20000);
+  };
 
-    // ✅ FIX: Include `mode: "sandbox"`
-    await cashfree.checkout({
-      paymentSessionId: result.paymentSessionId,
-      mode: "production", // 🔥 This ensures the correct environment is used
-    })
-    .then(async (paymentData) => {
-      console.log("✅ Payment Data:", paymentData);
-
-      if (paymentData.txStatus === "SUCCESS") {
-        console.log("🎉 Payment Successful!");
-
-        // ✅ UPDATE FIRESTORE AFTER PAYMENT SUCCESS
+  const handlePaymentConfirmation = async (status) => {
+    if (status === "done") {
+      try {
+        console.log("⏳ Updating Firestore for booking...");
         const docRef = doc(db, "Property", id);
         await updateDoc(docRef, {
           availability: "booked",
@@ -166,24 +85,18 @@ const PropertyDetails = () => {
           plan: paymentPlan,
         }));
 
-        setPaymentSuccess(true);
-      } else {
-        console.warn("⚠️ Payment failed:", paymentData);
-        setError("Payment failed. Please try again.");
+        setBookingSuccess(true);
+        setShowQR(false);
+        setShowPaymentConfirmation(false);
+        console.log("✅ Booking Successful!");
+      } catch (error) {
+        console.error("❌ Booking error:", error);
+        setError("Something went wrong. Please try again.");
       }
-    })
-    .catch((error) => {
-      console.error("❌ Payment process error:", error);
-      setError("Payment process encountered an error.");
-    });
-
-  } catch (error) {
-    console.error("❌ Payment error:", error);
-    setError("Something went wrong. Please try again.");
-  }
-};
-
-  
+    } else {
+      router.push("/");
+    }
+  };
 
   if (!property) {
     return (
@@ -202,25 +115,31 @@ const PropertyDetails = () => {
           <p className="text-lg"><strong>Plot No:</strong> {property.plotNo}</p>
           <p className="text-lg"><strong>Size:</strong> {property.size} SQ.YD</p>
           <p className="text-lg"><strong>Booking Price:</strong> ₹{property.bookPrice}</p>
-          <p className="text-lg"><strong>Transaction + GST Charges:</strong> ₹495.60</p>
           <p className="text-lg"><strong>Total Price:</strong> ₹{parseInt(property.size) * 16000}</p>
 
-          <p className="text-gray-400 cursor-pointer" onClick={() => router.push("/termAndCondition")}>
-            Terms & Conditions Apply
-          </p>
+          <p className="text-gray-400 cursor-pointer" onClick={() => router.push("/termAndCondition")}>Terms & Conditions Apply</p>
 
-          {paymentSuccess && (
-            <div className="bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg text-center">
-              ✅ Payment Successful! Your booking is confirmed.
+          {showQR && (
+            <div className="bg-gray-700 text-white px-6 py-3 rounded-lg shadow-lg text-center">
+              <p>🔳 Scan the QR Code for Payment</p>
+              <img src="/assets/Qr.jpg" alt="QR Code" className="mx-auto my-4" />
+            </div>
+          )}
+
+          {showPaymentConfirmation && (
+            <div className="mt-4 text-center">
+              <p className="text-lg">Was the payment successful?</p>
+              <button className="px-4 py-2 bg-green-500 text-white rounded-lg mx-2" onClick={() => handlePaymentConfirmation("done")}>Yes</button>
+              <button className="px-4 py-2 bg-red-500 text-white rounded-lg mx-2" onClick={() => handlePaymentConfirmation("no")}>No</button>
             </div>
           )}
 
           {(property.availability === "booked" || property.availability === "sold") ? (
             <p className="text-lg mt-4 text-red-500">
-              <strong>Booked by:</strong> {property.bookedBy} | {property.plan} Plan
+              <strong>Booked by:</strong> @{property.bookedBy}@25 | {property.plan} Plan
             </p>
           ) : (
-            !paymentSuccess && (
+            !bookingSuccess && !showQR && (
               <div className="mt-2">
                 <input
                   type="text"
@@ -242,7 +161,7 @@ const PropertyDetails = () => {
 
                 {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
-                <button className="px-4 py-2 bg-purple-500 text-white rounded-lg w-full" onClick={handlePayment}>
+                <button className="px-4 py-2 bg-purple-500 text-white rounded-lg w-full" onClick={handleBooking}>
                   Book Now
                 </button>
               </div>
