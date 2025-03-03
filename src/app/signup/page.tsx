@@ -53,15 +53,15 @@ export default function SignupPage() {
       setMessage("Account created successfully!");
       setError("");
 
-      await fetch("/api/sign", {  // ✅ Correct API route
+      await fetch("/api/contact", {  // ✅ Correct API route
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, contact }),
       });
       
 
-      // Redirect to login after 1 seconds
-      setTimeout(() => router.push("/"), 1000);
+      // Redirect to login after 3 seconds
+      setTimeout(() => router.push("/"), 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message);
